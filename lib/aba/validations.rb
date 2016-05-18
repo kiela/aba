@@ -65,6 +65,14 @@ class Aba
     end
 
     module ClassMethods
+      def inherited(subclass)
+        subclass.instance_variable_set(:@_validations, @_validations.dup)
+      end
+
+      def inherit_validations(value = true)
+        @_validations = Hash.new unless value
+      end
+
       def validates_presence_of(*attributes)
         attributes.each do |a|
           add_validation_attribute(a, :presence)
