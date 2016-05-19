@@ -26,6 +26,30 @@ class Aba
       yield self if block_given?
     end
 
+    def add_transaction(attrs = {})
+      transaction = prepare_transaction(attrs)
+      @transactions.add_transaction(transaction)
+      @summary.add_transaction(transaction)
+    end
+
+    def valid?
+      return (@headers.valid? && @transactions.valid?)
+    end
+
+    def error_collection
+      # Run validations
+      @headers.valid?
+      @transactions.valid?
+
+      # Build error collection
+      all_errors = {}
+      all_errors[:headers] = @headers.errors unless @headers.errors.empty?
+      all_errors[:transactions] = @transactions.errors unless @transactions.errors.empty?
+
+      return all_errors unless all_errors.empty?
+    end
+    alias_method :errors, :error_collection
+
     def to_s
       # Descriptive record
       output = "#{@headers.to_s}\r\n"
@@ -37,29 +61,6 @@ class Aba
       output += @summary.to_s
 
       return output
-    end
-
-    def add_transaction(attrs = {})
-      transaction = prepare_transaction(attrs)
-      @transactions.add_transaction(transaction)
-      @summary.add_transaction(transaction)
-    end
-
-    def valid?
-      return (@headers.valid? && @transactions.valid?)
-    end
-
-    def errors
-      # Run validations
-      @headers.valid?
-      @transactions.valid?
-
-      # Build errors
-      all_errors = {}
-      all_errors[:headers] = @headers.errors unless @headers.errors.empty?
-      all_errors[:transactions] = @transactions.errors unless @transactions.errors.empty?
-
-      return all_errors unless all_errors.empty?
     end
 
     private
