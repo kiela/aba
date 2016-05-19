@@ -26,19 +26,6 @@ class Aba
       yield self if block_given?
     end
 
-    def to_s
-      # Descriptive record
-      output = "#{@headers.to_s}\r\n"
-
-      # Transactions records
-      output = "#{@transactions.to_s}\r\n"
-
-      # Batch control record
-      output += @summary.to_s
-
-      return output
-    end
-
     def add_transaction(attrs = {})
       transaction = prepare_transaction(attrs)
       @transactions.add_transaction(transaction)
@@ -49,17 +36,31 @@ class Aba
       return (@headers.valid? && @transactions.valid?)
     end
 
-    def errors
+    def error_collection
       # Run validations
       @headers.valid?
       @transactions.valid?
 
-      # Build errors
+      # Build error collection
       all_errors = {}
       all_errors[:headers] = @headers.errors unless @headers.errors.empty?
       all_errors[:transactions] = @transactions.errors unless @transactions.errors.empty?
 
       return all_errors unless all_errors.empty?
+    end
+    alias_method :errors, :error_collection
+
+    def to_s
+      # Descriptive record
+      output = "#{@headers.to_s}\r\n"
+
+      # Transactions records
+      output += "#{@transactions.to_s}\r\n"
+
+      # Batch control record
+      output += @summary.to_s
+
+      return output
     end
 
     private

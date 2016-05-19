@@ -2,22 +2,19 @@ class Aba
   module Validations
     attr_accessor :error_collection
 
+    alias_method :errors, :error_collection
+
     BECS_PATTERN = /\A[\w\+\-\@\ \$\!\%\&\(\)\*\.\/\#\=\:\;\?\,\'\[\]\_\^]*\Z/
     INDICATORS = [' ', 'N', 'T', 'W', 'X', 'Y']
 
     def self.included(base)
-      base.instance_eval do
-        @_validations = {}
-      end
-
-      base.send :extend, ClassMethods
+      base.instance_variable_set(:@_validations, Hash.new)
+      base.extend(ClassMethods)
     end
 
     def valid?
       return !has_errors?
     end
-
-    alias_method 'errors', 'error_collection'
 
     private
 
@@ -74,8 +71,8 @@ class Aba
       end
 
       def validates_presence_of(*attributes)
-        attributes.each do |a|
-          add_validation_attribute(a, :presence)
+        attributes.each do |attribute|
+          add_validation_attribute(attribute, :presence)
         end
       end
 
@@ -115,7 +112,7 @@ class Aba
       private
 
       def add_validation_attribute(attribute, type, param = true)
-        @_validations[attribute] = {} unless @_validations[attribute]
+        @_validations[attribute] = Hash.new unless @_validations[attribute]
         @_validations[attribute][type] = param
       end
     end
