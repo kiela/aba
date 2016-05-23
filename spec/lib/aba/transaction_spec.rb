@@ -54,6 +54,38 @@ describe Aba::Transaction do
     end
   end
 
+  describe "#amount" do
+    context "when no amount was set" do
+      it "falls back to 0" do
+        expect(described_class.new.amount).to eq(0)
+      end
+    end
+
+    context "when transaction is credit type" do
+      before do
+        subject.transaction_code = described_class::CREDIT_TRANSACTION_CODES.sample
+      end
+
+      it "returns set value" do
+        subject.amount = 12345
+
+        expect(subject.amount).to eq(12345)
+      end
+    end
+
+    context "when transaction is debit type" do
+      before do
+        subject.transaction_code = described_class::DEBIT_TRANSACTION_CODES.sample
+      end
+
+      it "returns value set as negative" do
+        subject.amount = 12345
+
+        expect(subject.amount).to eq(-12345)
+      end
+    end
+  end
+
   describe "#to_s" do
     it "should create a transaction row" do
       expect(subject.to_s).to include("1345-453 23432342W530000050050John Doe                        R45343            123-234  4647642Remitter        00000087")
