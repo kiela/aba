@@ -59,7 +59,7 @@ class Aba
       return output
     end
 
-    private
+    protected
 
       def prepare_transaction(attrs)
         if attrs.kind_of?(Aba::Transaction)
