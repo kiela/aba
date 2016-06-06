@@ -1,7 +1,3 @@
-require "aba/batch/headers"
-require "aba/batch/transactions"
-require "aba/batch/summary"
-
 class Aba
   class Batch
     extend Forwardable
@@ -76,3 +72,7 @@ class Aba
       end
   end
 end
+
+require "aba/batch/headers"
+require "aba/batch/transactions"
+require "aba/batch/summary"

@@ -1,8 +1,3 @@
-require 'aba/parser/line'
-require 'aba/parser/headers'
-require 'aba/parser/activity'
-require 'aba/parser/summary'
-
 class Aba
   class Parser
     class Error < ::Exception; end
@@ -137,3 +132,8 @@ class Aba
       end
   end
 end
+
+require 'aba/parser/line'
+require 'aba/parser/headers'
+require 'aba/parser/activity'
+require 'aba/parser/summary'

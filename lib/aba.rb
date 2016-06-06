@@ -1,9 +1,3 @@
-require "aba/version"
-require "aba/validations"
-require "aba/batch"
-require "aba/transaction"
-require "aba/parser"
-
 class Aba
   def self.batch(attrs = {}, transactions = [])
     return Aba::Batch.new(attrs, transactions)
@@ -13,3 +7,9 @@ class Aba
     return Aba::Parser.parse(input)
   end
 end
+
+require "aba/version"
+require "aba/validations"
+require "aba/batch"
+require "aba/transaction"
+require "aba/parser"
