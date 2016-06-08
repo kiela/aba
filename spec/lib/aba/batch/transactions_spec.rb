@@ -109,7 +109,7 @@ describe Aba::Batch::Transactions do
 
       it "raises an exception" do
         expect{ subject.validate! }
-          .to raise_error(RuntimeError, /no transactions/i)
+          .to raise_error(Aba::Error, /no transactions/i)
       end
     end
 
@@ -121,7 +121,7 @@ describe Aba::Batch::Transactions do
 
         it "raises an exception" do
           expect{ subject.validate! }
-            .to raise_error(RuntimeError, /transactions are invalid/)
+            .to raise_error(Aba::Error, /transactions are invalid/)
         end
       end
     end
